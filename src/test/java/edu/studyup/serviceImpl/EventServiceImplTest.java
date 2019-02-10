@@ -75,4 +75,28 @@ class EventServiceImplTest {
 			eventServiceImpl.updateEventName(eventID, "Renamed Event 3");
 		  });
 	}
+
+	@Test
+	void testUpdateEventName_LengthCheckGoodCase() throws StudyUpException {
+		// Up to 20 characters should be allowed for the length
+		final int eventID = 1;
+		String testStr = "";
+		for (int i = 0; i <= 20; i++) {
+			Event event = eventServiceImpl.updateEventName(eventID, testStr);
+			assertEquals(testStr, event.getName());
+			testStr += "*";
+		}
+	}
+
+	@Test
+	void testUpdateEventName_LengthCheckBadCase() {
+		// Up to 20 characters should be allowed for the length
+		// Pass a string of length 21 and ensure it throws an exception
+		final int eventID = 1;
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			final String testStr = "123456789abcdef123456";
+			assertEquals(testStr.length(), 21);
+			eventServiceImpl.updateEventName(eventID, testStr);
+		  });
+	}
 }
