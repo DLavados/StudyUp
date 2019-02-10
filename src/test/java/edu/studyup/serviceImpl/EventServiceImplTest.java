@@ -42,18 +42,25 @@ class EventServiceImplTest {
 		student.setEmail("JohnDoe@email.com");
 		student.setId(1);
 
-		//Create Event1
-		Event event = new Event();
-		event.setEventID(1);
-		event.setDate(new Date());
-		event.setName("Event 1");
-		Location location = new Location(-122, 37);
-		event.setLocation(location);
-		List<Student> eventStudents = new ArrayList<>();
-		eventStudents.add(student);
-		event.setStudents(eventStudents);
+		//Create Event1 in the past
+		Event event1 = new Event();
+		event1.setEventID(1);
+		event1.setDate(new Date(0));
+		event1.setName("Event 1");
+		event1.setLocation(new Location(-122, 37));
+		event1.setStudents(new ArrayList<>());
+		event1.getStudents().add(student);
+		DataStorage.eventData.put(event1.getEventID(), event1);
 
-		DataStorage.eventData.put(event.getEventID(), event);
+		//Create Event2 in the distant future
+		Event event2 = new Event();
+		event2.setEventID(2);
+		event2.setDate(new Date(java.sql.Date.valueOf("8099-01-01").getTime()));
+		event2.setName("Event 2");
+		event2.setLocation(new Location(-122, 37));
+		event2.setStudents(new ArrayList<>());
+		event2.getStudents().add(student);
+		DataStorage.eventData.put(event2.getEventID(), event2);
 	}
 
 	@AfterEach
