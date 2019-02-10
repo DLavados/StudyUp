@@ -41,7 +41,7 @@ class EventServiceImplTest {
 		student.setLastName("Doe");
 		student.setEmail("JohnDoe@email.com");
 		student.setId(1);
-		
+
 		//Create Event1
 		Event event = new Event();
 		event.setEventID(1);
@@ -52,7 +52,7 @@ class EventServiceImplTest {
 		List<Student> eventStudents = new ArrayList<>();
 		eventStudents.add(student);
 		event.setStudents(eventStudents);
-		
+
 		DataStorage.eventData.put(event.getEventID(), event);
 	}
 
@@ -67,7 +67,7 @@ class EventServiceImplTest {
 		eventServiceImpl.updateEventName(eventID, "Renamed Event 1");
 		assertEquals("Renamed Event 1", DataStorage.eventData.get(eventID).getName());
 	}
-	
+
 	@Test
 	void testUpdateEvent_WrongEventID_badCase() {
 		int eventID = 3;
@@ -75,5 +75,4 @@ class EventServiceImplTest {
 			eventServiceImpl.updateEventName(eventID, "Renamed Event 3");
 		  });
 	}
-	
 }
