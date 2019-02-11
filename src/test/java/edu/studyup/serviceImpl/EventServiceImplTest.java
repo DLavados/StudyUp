@@ -85,13 +85,13 @@ class EventServiceImplTest {
 
 	@Test
 	void testUpdateEventName_LengthCheckGoodCase() throws StudyUpException {
-		// Up to 20 characters should be allowed for the length
+		// 1 character up to 20 characters should be allowed for the length
 		final int eventID = 1;
 		String testStr = "";
-		for (int i = 0; i <= 20; i++) {
+		for (int i = 0; i < 20; i++) {
+			testStr += "*";
 			Event event = eventServiceImpl.updateEventName(eventID, testStr);
 			assertEquals(testStr, event.getName());
-			testStr += "*";
 		}
 	}
 
@@ -104,6 +104,17 @@ class EventServiceImplTest {
 			final String testStr = "123456789abcdef123456";
 			assertEquals(testStr.length(), 21);
 			eventServiceImpl.updateEventName(eventID, testStr);
+		  });
+	}
+
+	@Test
+	void testUpdateEventName_EmptyNameBadCase() throws StudyUpException {
+		// An event name should not be allowed to be empty; an
+		// exception should be thrown when attempting to set an empty
+		// name
+		final int eventID = 1;
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.updateEventName(eventID, "");
 		  });
 	}
 
