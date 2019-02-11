@@ -114,8 +114,8 @@ class EventServiceImplTest {
 		// (i.e., event date is in the future)
 		List<Event> activesList = new ArrayList<>();
 		activesList = eventServiceImpl.getActiveEvents();
-		Assertions.assertTrue(activesList.get(0).getDate().after(new Date()));
 		assertEquals(activesList.size(), 1);
+		Assertions.assertTrue(activesList.get(0).getDate().after(new Date()));
 	}
 
 	@Test
@@ -168,6 +168,22 @@ class EventServiceImplTest {
 		student.setId(1);
 		eventServiceImpl.addStudentToEvent(student, eventID);
 		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 1);
+	}
+	
+	@Test
+	void testAddStudentToEvent_twoSameStudentsCase() throws StudyUpException{
+		// Add two students that are exactly the same in all entry fields.
+		// Should not be duplicating, but does.
+		// By default there is 1 student, and we add two to check for 3. 
+		int eventID = 2;
+		Student student = new Student();
+		student.setFirstName("Student");
+		student.setLastName("Clone");
+		student.setEmail("SecondStudent@email.com");
+		student.setId(1);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+		assertNotEquals(DataStorage.eventData.get(eventID).getStudents().size(), 3);
 	}
 
 	@Test
