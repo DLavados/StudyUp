@@ -106,4 +106,69 @@ class EventServiceImplTest {
 			eventServiceImpl.updateEventName(eventID, testStr);
 		  });
 	}
+
+	@Test
+	void testGetActiveEvents_badCase() {
+		// There are two events total: one in the year 1970 and one in 8099
+		// Ensure that only the 8099 event is returned
+		// (i.e., event date is in the future)
+		List<Event> activesList = new ArrayList<>();
+		activesList = eventServiceImpl.getActiveEvents();
+		Assertions.assertTrue(activesList.get(0).getDate().after(new Date()));
+		assertEquals(activesList.size(), 1);
+	}
+
+	@Test
+	void testAddStudentToEvent_GoodCase() throws StudyUpException {
+		int eventID = 1;
+		Student student = new Student();
+		student.setFirstName("Daniel");
+		student.setLastName("Alsawaf");
+		student.setEmail("DanielAlsawaf@email.com");
+		student.setId(2);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 2);
+	}
+
+	@Test
+	void testAddStudentToEvent_BadNumberCase() throws StudyUpException {
+		// Add two students to the second event and check if
+		// there can be >2 students in an Event
+		int eventID = 2;
+		Student student = new Student();
+		student.setFirstName("Student");
+		student.setLastName("Two");
+		student.setEmail("SecondStudent@email.com");
+		student.setId(2);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+
+		Student student2 = new Student();
+		student2.setFirstName("Student");
+		student2.setLastName("Three");
+		student2.setEmail("ThirdStudent@email.com");
+		student2.setId(3);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 3);
+	}
+
+	@Test
+	void testAddStudentToEvent_unknownEventCase() throws StudyUpException {
+		int eventID = 3;
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			Student student = new Student();
+			student.setFirstName("Daniel");
+			student.setLastName("Alsawaf");
+			student.setEmail("DanielAlsawaf@email.com");
+			student.setId(2);
+			eventServiceImpl.addStudentToEvent(student, eventID);
+		  });
+	}
+
+	@Test
+	void testDeleteEvent_goodCase() {
+		// Delete the second Event and make sure it's gone
+		int eventID = 2;
+		eventServiceImpl.deleteEvent(eventID);
+		assertNull(DataStorage.eventData.get(eventID));
+	}
 }
