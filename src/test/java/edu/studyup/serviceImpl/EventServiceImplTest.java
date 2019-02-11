@@ -161,7 +161,7 @@ class EventServiceImplTest {
 		eventServiceImpl.addStudentToEvent(student, eventID);
 		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 3);
 	}
-	
+
 	@Test
 	void testAddStudentToEvent_addStudentToEmptyEvent() throws StudyUpException {
 		final int eventID = 3;
@@ -171,7 +171,7 @@ class EventServiceImplTest {
 		event3.setName("Event 3");
 		event3.setLocation(new Location(-122, 37));
 		DataStorage.eventData.put(event3.getEventID(), event3);
-		
+
 		Student student = new Student();
 		student.setFirstName("John");
 		student.setLastName("Doe");
@@ -180,7 +180,7 @@ class EventServiceImplTest {
 		eventServiceImpl.addStudentToEvent(student, eventID);
 		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 1);
 	}
-	
+
 	@Test
 	void testAddStudentToEvent_twoSameStudentsCase() throws StudyUpException {
 		// Add the exact same student twice and see if that student shows
@@ -221,7 +221,7 @@ class EventServiceImplTest {
 		eventServiceImpl.deleteEvent(eventID);
 		assertNull(DataStorage.eventData.get(eventID));
 	}
-	
+
 	@Test
 	void testGetPastEvents_goodCase() {
 		List<Event> pastList = new ArrayList<>();
