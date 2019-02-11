@@ -150,6 +150,25 @@ class EventServiceImplTest {
 		eventServiceImpl.addStudentToEvent(student, eventID);
 		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 3);
 	}
+	
+	@Test
+	void testAddStudentToEvent_addStudentToEmptyEvent() throws StudyUpException {
+		int eventID = 3;
+		Event event3 = new Event();
+		event3.setEventID(eventID);
+		event3.setDate(new Date(0));
+		event3.setName("Event 3");
+		event3.setLocation(new Location(-122, 37));
+		DataStorage.eventData.put(event3.getEventID(), event3);
+		
+		Student student = new Student();
+		student.setFirstName("John");
+		student.setLastName("Doe");
+		student.setEmail("JohnDoe@email.com");
+		student.setId(1);
+		eventServiceImpl.addStudentToEvent(student, eventID);
+		assertEquals(DataStorage.eventData.get(eventID).getStudents().size(), 1);
+	}
 
 	@Test
 	void testAddStudentToEvent_unknownEventCase() throws StudyUpException {
@@ -170,5 +189,13 @@ class EventServiceImplTest {
 		int eventID = 2;
 		eventServiceImpl.deleteEvent(eventID);
 		assertNull(DataStorage.eventData.get(eventID));
+	}
+	
+	@Test
+	void testGetPastEvents_goodCase() {
+		List<Event> pastList = new ArrayList<>();
+		pastList = eventServiceImpl.getPastEvents();
+		Assertions.assertTrue(pastList.get(0).getDate().before(new Date()));
+		assertEquals(pastList.size(), 1);
 	}
 }
