@@ -70,14 +70,14 @@ class EventServiceImplTest {
 
 	@Test
 	void testUpdateEventName_GoodCase() throws StudyUpException {
-		int eventID = 1;
+		final int eventID = 1;
 		eventServiceImpl.updateEventName(eventID, "Renamed Event 1");
 		assertEquals("Renamed Event 1", DataStorage.eventData.get(eventID).getName());
 	}
 
 	@Test
 	void testUpdateEvent_WrongEventID_badCase() {
-		int eventID = 3;
+		final int eventID = 3;
 		Assertions.assertThrows(StudyUpException.class, () -> {
 			eventServiceImpl.updateEventName(eventID, "Renamed Event 3");
 		  });
@@ -120,7 +120,7 @@ class EventServiceImplTest {
 
 	@Test
 	void testAddStudentToEvent_GoodCase() throws StudyUpException {
-		int eventID = 1;
+		final int eventID = 1;
 		Student student = new Student();
 		student.setFirstName("Daniel");
 		student.setLastName("Alsawaf");
@@ -134,7 +134,7 @@ class EventServiceImplTest {
 	void testAddStudentToEvent_BadNumberCase() throws StudyUpException {
 		// Add two students to the second event and check if
 		// there can be >2 students in an Event
-		int eventID = 2;
+		final int eventID = 2;
 		Student student = new Student();
 		student.setFirstName("Student");
 		student.setLastName("Two");
@@ -153,7 +153,7 @@ class EventServiceImplTest {
 	
 	@Test
 	void testAddStudentToEvent_addStudentToEmptyEvent() throws StudyUpException {
-		int eventID = 3;
+		final int eventID = 3;
 		Event event3 = new Event();
 		event3.setEventID(eventID);
 		event3.setDate(new Date(0));
@@ -171,24 +171,28 @@ class EventServiceImplTest {
 	}
 	
 	@Test
-	void testAddStudentToEvent_twoSameStudentsCase() throws StudyUpException{
-		// Add two students that are exactly the same in all entry fields.
-		// Should not be duplicating, but does.
-		// By default there is 1 student, and we add two to check for 3. 
-		int eventID = 2;
+	void testAddStudentToEvent_twoSameStudentsCase() throws StudyUpException {
+		// Add the exact same student twice and see if that student shows
+		// up twice in the list of students for an event (the correct
+		// behavior is that the student should only show up once)
+		final int eventID = 2;
 		Student student = new Student();
 		student.setFirstName("Student");
 		student.setLastName("Clone");
 		student.setEmail("SecondStudent@email.com");
 		student.setId(1);
+
+		int oldStudentSize = DataStorage.eventData.get(eventID).getStudents().size();
 		eventServiceImpl.addStudentToEvent(student, eventID);
 		eventServiceImpl.addStudentToEvent(student, eventID);
-		assertNotEquals(DataStorage.eventData.get(eventID).getStudents().size(), 3);
+
+		int newStudentSize = DataStorage.eventData.get(eventID).getStudents().size();
+		assertEquals(oldStudentSize + 1, newStudentSize);
 	}
 
 	@Test
 	void testAddStudentToEvent_unknownEventCase() throws StudyUpException {
-		int eventID = 3;
+		final int eventID = 3;
 		Assertions.assertThrows(StudyUpException.class, () -> {
 			Student student = new Student();
 			student.setFirstName("Daniel");
@@ -202,7 +206,7 @@ class EventServiceImplTest {
 	@Test
 	void testDeleteEvent_goodCase() {
 		// Delete the second Event and make sure it's gone
-		int eventID = 2;
+		final int eventID = 2;
 		eventServiceImpl.deleteEvent(eventID);
 		assertNull(DataStorage.eventData.get(eventID));
 	}
