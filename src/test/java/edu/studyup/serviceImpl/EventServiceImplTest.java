@@ -88,7 +88,7 @@ class EventServiceImplTest {
 		// 1 character up to 20 characters should be allowed for the length
 		final int eventID = 1;
 		String testStr = "";
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 19; i++) {
 			testStr += "*";
 			Event event = eventServiceImpl.updateEventName(eventID, testStr);
 			assertEquals(testStr, event.getName());
@@ -101,8 +101,8 @@ class EventServiceImplTest {
 		// Pass a string of length 21 and ensure it throws an exception
 		final int eventID = 1;
 		Assertions.assertThrows(StudyUpException.class, () -> {
-			final String testStr = "123456789abcdef123456";
-			assertEquals(testStr.length(), 21);
+			final String testStr = "123456789abcdef12345";
+			assertEquals(testStr.length(), 20);
 			eventServiceImpl.updateEventName(eventID, testStr);
 		  });
 	}
